@@ -188,7 +188,7 @@ function App() {
           </BottomNavigation>
         </Paper> 
       </Flex>
-      <Flex position='fixed' className='WatermarkWrapper'>
+      <Flex className='WatermarkWrapper'>
         <Desinged width='150px' height='24px' />
       </Flex>
     </Flex>
