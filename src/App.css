@@ -31,14 +31,14 @@ html, #root, body, .App {
 }
 
 .Wrapper {
-  height: 100vh;
+  height: 95vh;
   display: flex;
   flex-direction: column;
 }
 
 .BodyWrapper {
   overflow-y: auto;
-  flex: 100%;
+  flex: 95%;
 }
 
 .FooterWrapper {
