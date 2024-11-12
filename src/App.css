@@ -70,3 +70,8 @@ html, #root, body, .App {
   justify-content: center;
   align-self: center;
 }
+
+.Button:active {
+  background-color: #676767;
+  transform: translateY(4px);
+}
