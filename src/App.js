@@ -118,7 +118,7 @@ function App() {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="primary" onClick={() => handleClickOpen(beastCode)}>
+          <Button size="small" color="secondary" onClick={() => handleClickOpen(beastCode)}>
             Поведение
           </Button>
         </CardActions>
