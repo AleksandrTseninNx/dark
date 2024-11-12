@@ -118,7 +118,7 @@ function App() {
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" color="secondary" onClick={() => handleClickOpen(beastCode)}>
+          <Button size="small" variant="outlined" color="primary" onClick={() => handleClickOpen(beastCode)}>
             Поведение
           </Button>
         </CardActions>
@@ -205,11 +205,11 @@ function App() {
           <Flex flexDirection='row' columnGap={16} justifyContent='space-between'>
             <Input placeholder='Чьих будете' value={player} onChange={e => setPlayer(e.target.value)} />
             <Input placeholder='Сколько вас' type='number' value={playerCount} onChange={e => setPlayerCount(e.target.value)} />
-            <IconButton onClick={setInBag}><AddIcon /></IconButton>
+            <IconButton type='primary' onClick={setInBag}><AddIcon /></IconButton>
           </Flex>
           <Flex flexDirection='row' columnGap={16} justifyContent='space-between'>
           <Typography gutterBottom variant="h5" component="div">Сейчас в мешке {bag.length}</Typography>
-          <IconButton onClick={clearBag}><DeleteIcon /></IconButton>
+          <IconButton type='primary' onClick={clearBag}><DeleteIcon /></IconButton>
           </Flex>
 
           <Typography gutterBottom variant="h5" component="div">Сейчас во тьму отправляется {playerToDark}</Typography>
@@ -224,7 +224,7 @@ function App() {
             }
 
             var index = Math.floor(Math.random() * array.length);
-            var currentPlayer = array[Math.floor(Math.random() * array.length)];
+            var currentPlayer = array[index];
 
             setTimeout(() => {
               setPlayerToDark(currentPlayer);
@@ -232,6 +232,8 @@ function App() {
 
             array.splice(index, 1);
             setBag(arrayShuffle(array));
+            console.log("🚀 ~ randomizer ~ array:", array)
+            
           }}><AxesWhite height={140} width={140} /></Flex>
 
         </Flex>
