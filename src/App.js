@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { ReactComponent as Logo } from './icons/logo.svg';
 import { ReactComponent as Desinged } from './icons/Designed.svg';
 import { ReactComponent as Druid } from './icons/druid.svg';
 import { ReactComponent as Axes } from './icons/axes.svg';
@@ -8,7 +7,7 @@ import { ReactComponent as Book } from './icons/book.svg';
 import Paper from '@mui/material/Paper';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import { armors, artifacts, beasts, beastsBehavior, magic, weapons } from './constants';
+import { armors, artifacts, beasts, beastsBehavior, magic, trauma, weapons } from './constants';
 import Flex from '@react-css/flex'
 
 import Card from '@mui/material/Card';
@@ -45,12 +44,20 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Modal from '@mui/material/Modal';
-import { Margin } from '@mui/icons-material';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
+import Fab from '@mui/material/Fab';
+import CasinoIcon from '@mui/icons-material/Casino';
+import BloodtypeIcon from '@mui/icons-material/Bloodtype';
+import CancelIcon from '@mui/icons-material/Cancel';
+
 
 function App() {
   const [value, setValue] = React.useState(1);
   const [open, setOpen] = React.useState(false);
   const [openModal, setOpenModal] = React.useState(false);
+  const [openClearAllModal, setOpenClearAllModal] = React.useState(false);
   const [behavior, setBehavior] = React.useState({});
   const [bag, setBag] = React.useState([]);
 
@@ -74,10 +81,18 @@ function App() {
     setBehavior(beastsBehavior.find(({ code }) => code === beastCode));
     setOpen(!open);
   };
-  const handleRoundsUp = (beastCode) => {
+  const handleRoundsUp = () => {
     setRound(round + 1);
     setOpenModal(false);
   };
+
+  const handleClearAll = () => {
+    setBag([]);
+    setPlayer('');
+    setPlayerToDark('');
+    setPlayerCount(0);
+    setRound(1);
+  }
 
   const setInBag = () => {
     var i = 0;
@@ -101,7 +116,13 @@ function App() {
     },
   }));
 
-  const multiActionAreaCard = (beastCode, header, body, weapon, handleClickOpen) => {
+  const getChips = (code, name, ruletext) => {
+    return (
+      <Chip key={code} label={name} onClick={() => alert(ruletext)} />
+    )
+  }
+
+  const multiActionAreaCard = (beastCode, header, body, weapon, rules, handleClickOpen) => {
     return (
       <Card key={beastCode}>
         <CardActionArea>
@@ -109,28 +130,32 @@ function App() {
             <Typography gutterBottom variant="h5" component="div">
               {header}
             </Typography>
-            <Typography variant="body2" component="div" sx={{ color: 'text.secondary' }}>
+            <Typography variant="body2" component="div" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
               {body}
             </Typography>
-            <Typography variant="body2" component="div" sx={{ color: 'text.secondary' }}>
+            <Typography variant="body2" component="div" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
               {weapon}
             </Typography>
           </CardContent>
         </CardActionArea>
         <CardActions>
-          <Button size="small" variant="outlined" color="primary" onClick={() => handleClickOpen(beastCode)}>
+          <Button size="small" variant="outlined" color="default" onClick={() => handleClickOpen(beastCode)}>
             Поведение
           </Button>
+          <Stack direction="row" spacing={1}>
+            {rules.length > 0 && rules.map(rule => getChips(rule.code, rule.name, rule.ruleText))}
+          </Stack>
         </CardActions>
       </Card>
     );
   }
 
   const monstersList = () => {
-
     return (
       <Flex flexDirection='column' rowGap={16} className='Monster-list'>
-        {beasts.map(beast => multiActionAreaCard(beast.code, beast.name, beast.stats, beast.weapons, handleClickOpen))}
+
+
+        {beasts.map(beast => multiActionAreaCard(beast.code, beast.name, beast.stats, beast.weapons, beast.rules, handleClickOpen))}
 
         <BootstrapDialog
           onClose={handleClickOpen}
@@ -180,6 +205,46 @@ function App() {
   const randomizer = () => {
     return (
       <Flex flexDirection='column' style={{ padding: '24px' }}>
+
+        <Stack direction="column" spacing={1} sx={{ position: 'absolute', bottom: 112, right: 16, }}>
+          <Fab aria-label="Add" color="default" onClick={() => {
+            var rollDice = Math.floor(Math.random() * 6) + 1;
+            alert('Результат броска: ' + rollDice);
+          }}>
+            <CasinoIcon />
+          </Fab>
+
+          <Fab aria-label="Add" color="default" onClick={() => {
+            var rollDice1 = Math.floor(Math.random() * 6) + 1;
+            var rollDice2 = Math.floor(Math.random() * 6) + 1;
+            var nameTrauma = trauma.find(({ id }) => id === rollDice1 + rollDice2).name;
+
+            alert('Вам повезло: ' + nameTrauma);
+          }}>
+            <BloodtypeIcon />
+          </Fab>
+
+          <Fab aria-label="Add" color="default" onClick={() => setOpenClearAllModal(true)}>
+            <CancelIcon />
+          </Fab>
+        </Stack>
+
+        <Modal
+          open={openClearAllModal}
+          onClose={() => setOpenClearAllModal(false)}
+          aria-labelledby="parent-modal-title"
+          aria-describedby="parent-modal-description"
+        >
+          <Box sx={{ ...style, width: 300 }}>
+            <h2 id="parent-modal-title">Сбросить все?</h2>
+            <p id="parent-modal-description">
+              Вы действительно хотите сбросить все счетчики и начать новую игру?
+            </p>
+            <Button onClick={handleClearAll}>Да</Button>
+            <Button onClick={() => setOpenClearAllModal(false)}>Нет</Button>
+          </Box>
+        </Modal>
+
         <Modal
           open={openModal}
           onClose={() => setOpenModal(false)}
@@ -202,14 +267,14 @@ function App() {
 
         <Flex flexDirection='column' rowGap={24}>
           <Typography gutterBottom variant="h5" component="div">Сбор команд</Typography>
-          <Flex flexDirection='row' columnGap={16} justifyContent='space-between'>
+          <Flex flexDirection='row' columnGap={8} justifyContent='space-between'>
             <Input placeholder='Чьих будете' value={player} onChange={e => setPlayer(e.target.value)} />
             <Input placeholder='Сколько вас' type='number' value={playerCount} onChange={e => setPlayerCount(e.target.value)} />
-            <IconButton type='primary' onClick={setInBag}><AddIcon /></IconButton>
+            <Fab aria-label="Add" color="default" size='small' onClick={setInBag}><AddIcon /></Fab>
           </Flex>
           <Flex flexDirection='row' columnGap={16} justifyContent='space-between'>
-          <Typography gutterBottom variant="h5" component="div">Сейчас в мешке {bag.length}</Typography>
-          <IconButton type='primary' onClick={clearBag}><DeleteIcon /></IconButton>
+            <Typography gutterBottom variant="h5" component="div">Сейчас в мешке {bag.length}</Typography>
+            <Fab aria-label="Add" color="default" size='small' onClick={clearBag}><DeleteIcon /></Fab>
           </Flex>
 
           <Typography gutterBottom variant="h5" component="div">Сейчас во тьму отправляется {playerToDark}</Typography>
@@ -232,8 +297,7 @@ function App() {
 
             array.splice(index, 1);
             setBag(arrayShuffle(array));
-            console.log("🚀 ~ randomizer ~ array:", array)
-            
+
           }}><AxesWhite height={140} width={140} /></Flex>
 
         </Flex>
@@ -248,19 +312,22 @@ function App() {
   };
 
   const itemsList = (weaponCode, name, description, rules) => {
+
     return (
       <Card key={weaponCode}>
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             {name}
           </Typography>
-          <Typography variant="body2" component="div" sx={{ color: 'text.secondary' }}>
+          <Typography variant="body2" component="div" sx={{ color: 'text.secondary', whiteSpace: 'pre-line' }}>
             {description}
           </Typography>
-          <Typography variant="body2" component="div" sx={{ color: 'text.secondary' }}>
-            {rules}
-          </Typography>
         </CardContent>
+        <CardActions>
+          <Stack direction="row" spacing={1}>
+            {rules.length > 0 && rules.map(rule => getChips(rule.code, rule.name, rule.ruleText))}
+          </Stack>
+        </CardActions>
       </Card>
     );
   }
