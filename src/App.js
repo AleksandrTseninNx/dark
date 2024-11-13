@@ -269,7 +269,7 @@ function App() {
           <Typography gutterBottom variant="h5" component="div">Сбор команд</Typography>
           <Flex flexDirection='row' columnGap={8} justifyContent='space-between'>
             <Input placeholder='Чьих будете' value={player} onChange={e => setPlayer(e.target.value)} />
-            <Input placeholder='Сколько вас' type='number' value={playerCount} onChange={e => setPlayerCount(e.target.value)} />
+            <Input style={{ width: '120px' }} placeholder='Сколько вас' type='number' value={playerCount} onChange={e => setPlayerCount(e.target.value)} />
             <Fab aria-label="Add" color="default" size='small' onClick={setInBag}><AddIcon /></Fab>
           </Flex>
           <Flex flexDirection='row' columnGap={16} justifyContent='space-between'>
