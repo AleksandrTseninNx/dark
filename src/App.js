@@ -216,9 +216,9 @@ function App() {
 
   const randomizer = () => {
     return (
-      <Flex flexDirection='column' style={{ padding: '24px' }}>
+      <Flex flexDirection='column' style={{ maxWidth: '450px', padding: '24px' }}>
 
-        <Stack direction="column" spacing={1} sx={{ position: 'absolute', bottom: 112, right: 16, }}>
+        <Stack direction="column" spacing={1} sx={{ position: 'absolute', bottom: 112, left: 394, }}>
           <Fab aria-label="Add" color="default" onClick={() => {
             var rollDice = Math.floor(Math.random() * 6) + 1;
             alert('Результат броска: ' + rollDice);
@@ -441,7 +441,7 @@ function App() {
             <Tab label="Магия" value="3" />
           </TabList>
         </Box>
-        <Box sx={{ overflow: 'scroll', paddingTop: '48px' }}>
+        <Box sx={{ overflowY: 'scroll', paddingTop: '48px' }}>
           <TabPanel value="0">
             <Flex flexDirection='column'>
               {getAccordeons()}
@@ -489,7 +489,7 @@ function App() {
         {getContent(value)}
       </Flex>
       <Flex className='FooterWrapper'>
-        <Paper sx={{ position: 'fixed', bottom: 24, left: 0, right: 0 }} elevation={3}>
+        <Paper sx={{ maxWidth: '450px', position: 'fixed', bottom: 24, left: 0, right: 0 }} elevation={3}>
           <BottomNavigation
             showLabels
             value={value}
