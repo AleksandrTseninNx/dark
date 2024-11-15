@@ -92,6 +92,7 @@ function App() {
     setPlayerToDark('');
     setPlayerCount(0);
     setRound(1);
+    setOpenClearAllModal(false);
   }
 
   const setInBag = () => {
@@ -105,6 +106,17 @@ function App() {
   const clearBag = () => {
     setBag([]);
   }
+
+  React.useEffect(() => {
+    const unloadCallback = (event) => {
+      event.preventDefault();
+      event.returnValue = "";
+      return "";
+    };
+  
+    window.addEventListener("beforeunload", unloadCallback);
+    return () => window.removeEventListener("beforeunload", unloadCallback);
+  }, []);
 
   //#region Renders
   const BootstrapDialog = styled(Dialog)(({ theme }) => ({
